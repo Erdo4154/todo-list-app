@@ -87,10 +87,17 @@ Realtime only works if the table is in the `supabase_realtime` publication — t
 
 ## Repo note
 
-This directory is not its own git repository — it sits inside the repo rooted at
-`C:\Users\erdin`. Git commands run from here operate on that home-directory repo, which
-tracks unrelated files. Do not commit from here without checking `git rev-parse --show-toplevel`
-first.
+This directory is its own git repository (`origin`:
+https://github.com/Erdo4154/todo-list-app, public), but it is nested inside another repo
+rooted at `C:\Users\erdin` that tracks unrelated home-directory files. The nesting is
+harmless as long as commands run from this directory; if something looks like it is touching
+files outside the project, check `git rev-parse --show-toplevel` — it must print the
+`supabase-todo-app` path.
+
+`.env` is intentionally not in the repo, so a fresh clone cannot run until it is recreated
+from `.env.example`. Keep it that way: the anon key is safe to expose in a browser bundle,
+but committing it to a public repo hands out the project's URL and key together, leaving RLS
+as the only thing standing between a stranger and the database.
 
 ## Purpose
 
