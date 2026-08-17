@@ -5,7 +5,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
-    'Supabase URL / anon key eksik. .env.example dosyasini .env olarak kopyalayip kendi degerlerinle doldur.',
+    'Supabase URL / anon key eksik. .env.example dosyasını .env olarak kopyalayıp kendi değerlerinle doldur.',
   )
 }
 

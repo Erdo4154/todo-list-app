@@ -20,18 +20,22 @@ fails the build, not just the lint.
 
 The app cannot run without a live Supabase project:
 
-1. Run `supabase/schema.sql` in the Supabase SQL Editor (creates `todos`, enables RLS,
-   creates the four policies, adds the table to the `supabase_realtime` publication).
+1. Run the files in `supabase/` in the SQL Editor, in numeric order: `schema.sql` (creates
+   `todos`, enables RLS, creates the four policies, adds the table to the `supabase_realtime`
+   publication), then `02_categories.sql` (creates `categories`, adds `todos.category_id`).
 2. Copy `.env.example` to `.env` and fill `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`.
 
 `.env` is gitignored and currently still holds the placeholder values, so a fresh checkout
 throws at startup — `src/lib/supabaseClient.ts` deliberately throws at import time when
 either variable is missing. Only `VITE_`-prefixed variables reach the browser bundle.
 
-`schema.sql` is a paste-into-the-SQL-editor script, not a migration system. The table uses
-`create table if not exists`, but the `create policy` statements are not idempotent and will
-error on a re-run. When changing the schema, update this file *and* the hand-written `Todo`
-interface in `src/types.ts` — there are no generated Supabase types.
+These are paste-into-the-SQL-editor scripts, not a migration system. Tables use
+`create table if not exists`, but `create policy` statements are not idempotent and will error
+on a re-run. When changing the schema, update the SQL *and* the hand-written interfaces in
+`src/types.ts` — there are no generated Supabase types.
+
+`src/types.ts` distinguishes `TodoRow` (the raw table row) from `Todo` (`TodoRow` plus the
+embedded `categories` relation). That split is load-bearing — see the realtime note below.
 
 ## Architecture
 
@@ -69,6 +73,14 @@ and applies INSERT / UPDATE / DELETE to local state from the payload. The mutati
 list refreshes because the change comes back over the channel. If you add optimistic updates,
 keep the existing id-dedup guard in the INSERT branch or rows will appear twice.
 
+One channel carries two `.on('postgres_changes', ...)` handlers, for `todos` and `categories`.
+
+A realtime payload is the **raw row only** — it never contains embedded relations. So a todo
+arriving over the channel has `category_id` but no `categories` object, while the same todo
+from the initial `.select('*, categories(...)')` has both. `attachCategory()` closes that gap
+by resolving the relation from `categoriesRef`. The ref exists so the subscription does not
+have to be torn down and rebuilt every time the category list changes.
+
 The subscription is created in a `useEffect` keyed on `userId` and torn down with
 `supabase.removeChannel(channel)`; React StrictMode double-mounts in dev, so any new
 subscription needs the same cleanup.
@@ -78,8 +90,9 @@ Realtime only works if the table is in the `supabase_realtime` publication — t
 
 ## Conventions
 
-- UI strings and code comments are Turkish written in plain ASCII, without Turkish diacritics
-  ("Yukleniyor...", "Cikis yap", "Henuz gorev yok."). Match that when adding text.
+- UI strings and code comments are Turkish with proper diacritics ("Yükleniyor...", "Çıkış yap",
+  "Henüz görev yok."). Write new text the same way — do not strip to ASCII. Source files are
+  UTF-8; `index.html` sets `charset="UTF-8"` and `lang="tr"`.
 - Errors from Supabase calls are destructured (`const { data, error } = await ...`), surfaced
   through a local `error` state, and rendered as `<p className="error">`. There is no toast or
   global error boundary.

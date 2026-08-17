@@ -22,7 +22,7 @@ function App() {
     return () => listener.subscription.unsubscribe()
   }, [])
 
-  if (checkingSession) return <p className="loading-screen">Yukleniyor...</p>
+  if (checkingSession) return <p className="loading-screen">Yükleniyor...</p>
 
   return <div className="app-shell">{session ? <TodoList session={session} /> : <Auth />}</div>
 }

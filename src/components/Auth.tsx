@@ -25,7 +25,7 @@ export default function Auth() {
     if (authError) {
       setError(authError.message)
     } else if (mode === 'sign-up') {
-      setMessage('Kayit olustu. Supabase ayarina gore e-postani onaylaman gerekebilir.')
+      setMessage('Kayıt oluştu. Supabase ayarına göre e-postanı onaylaman gerekebilir.')
     }
 
     setLoading(false)
@@ -34,7 +34,7 @@ export default function Auth() {
   return (
     <div className="auth-card">
       <h1>Supabase Todo</h1>
-      <p className="subtitle">{mode === 'sign-in' ? 'Hesabina giris yap' : 'Yeni hesap olustur'}</p>
+      <p className="subtitle">{mode === 'sign-in' ? 'Hesabına giriş yap' : 'Yeni hesap oluştur'}</p>
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">E-posta</label>
@@ -46,7 +46,7 @@ export default function Auth() {
           required
         />
 
-        <label htmlFor="password">Sifre</label>
+        <label htmlFor="password">Şifre</label>
         <input
           id="password"
           type="password"
@@ -57,7 +57,7 @@ export default function Auth() {
         />
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Bekle...' : mode === 'sign-in' ? 'Giris yap' : 'Kayit ol'}
+          {loading ? 'Bekle...' : mode === 'sign-in' ? 'Giriş yap' : 'Kayıt ol'}
         </button>
       </form>
 
@@ -69,7 +69,7 @@ export default function Auth() {
         className="link-button"
         onClick={() => setMode(mode === 'sign-in' ? 'sign-up' : 'sign-in')}
       >
-        {mode === 'sign-in' ? 'Hesabin yok mu? Kayit ol' : 'Zaten hesabin var mi? Giris yap'}
+        {mode === 'sign-in' ? 'Hesabın yok mu? Kayıt ol' : 'Zaten hesabın var mı? Giriş yap'}
       </button>
     </div>
   )

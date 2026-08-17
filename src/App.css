@@ -14,10 +14,18 @@
   color: #6b7280;
 }
 
-.auth-card,
-.todo-card {
+.auth-card {
   width: 100%;
   max-width: 420px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+}
+
+.todo-card {
+  width: 100%;
+  max-width: 520px;
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -147,4 +155,72 @@ button:disabled {
   color: #dc2626;
   padding: 0.25rem 0.5rem;
   font-weight: 500;
+}
+
+/* --- Kategoriler --- */
+
+.add-category {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.add-category input[type='text'] {
+  flex: 1;
+}
+
+.secondary-button {
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.filter-chip {
+  background: none;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.filter-chip.active {
+  background: #374151;
+  border-color: #374151;
+  color: #ffffff;
+}
+
+.add-todo {
+  flex-wrap: wrap;
+}
+
+.add-todo select {
+  padding: 0.6rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #374151;
+}
+
+.category-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #ffffff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.todo-list li.done .category-badge {
+  opacity: 0.5;
 }
